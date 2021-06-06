@@ -2,6 +2,6 @@
 Software to compress / decompress files in Java
 
 ```
-jar cf jar-file *.class
+jar cvf jar-file *.class
 java -jar <jar-file>
 ```
