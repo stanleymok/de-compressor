@@ -1,23 +1,42 @@
+import java.io.File;
 
 public class Main {
 	public static void main(String[] args) {
         if (args.length == 3) {
-            System.out.println("Compress");
-            compress(args[0], args[1], args[2]);
+            compressDir(args[0], args[1], args[2]);
         } else if (args.length == 2) {
-            System.out.println("DeCompress");
-            decompress(args[0], args[1]);
+            decompressDir(args[0], args[1]);
         } else {
-            System.out.println("Compression   Usage: java Main <input dir> <output dir> <max compressed size in MB> \nDecompression Usage: java Main <input dir> <output dir> ");
+            String helpMsg1 = "Compression   Usage: java Main <input dir> <output dir> <max compressed size in MB>";
+            String helpMsg2 = "Decompression Usage: java Main <input dir> <output dir>";
+            System.out.println(helpMsg1 + "\n" + helpMsg2);
         }
 	}
 
-    static void compress(String inputDir, String outputDir, String maxComprSize) {
+    static void compressDir(String inputDir, String outputDir, String maxComprSize) {
         int maxSize = Integer.parseInt(maxComprSize);  
-        System.out.println(maxSize);
+        final File folder = new File(inputDir);
+        listFiles(folder, inputDir, outputDir, maxSize);
     }
 
-    static void decompress(String inputDir, String outputDir) {
+    static void listFiles(final File folder, String inputDir, String outputDir, int maxSize) {
+        for (final File fileEntry : folder.listFiles()) {
+            if (fileEntry.isDirectory()) {
+                listFiles(fileEntry, inputDir, outputDir, maxSize);
+            } else {
+                System.out.println(fileEntry.getName());
+                compressFile(fileEntry, inputDir, outputDir, maxSize);
+            }
+        }
+    }
+
+    static void compressFile(final File file, String inputDir, String outputDir, int maxSize) {
+        System.out.println("compress code");
+        // compress from input dir/file to output dir/file
+
+    }
+
+    static void decompressDir(String inputDir, String outputDir) {
         System.out.println("DeCompress");
     }
 
