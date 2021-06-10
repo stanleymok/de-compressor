@@ -6,7 +6,11 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
 
+
+
 public class Main {
+
+    public static int readBufferSize = 16384;
 
 	public static void main(String[] args) {
         if (args.length == 3) {
@@ -21,7 +25,7 @@ public class Main {
 	}
 
     static void compressFileDriver(String inputDir, String outputDir, String maxMB) {
-        int maxBytes = Integer.parseInt(maxMB) + 1000000; 
+        int maxBytes = (int) (Double.parseDouble(maxMB) * 1000000); 
         File outFolder = new File(outputDir);
         if (!outFolder.exists())
             outFolder.mkdir();
@@ -51,11 +55,15 @@ public class Main {
             FileInputStream fis = new FileInputStream(fileToZip);
             ZipEntry zipEntry = new ZipEntry(fileName);
             zos.putNextEntry(zipEntry);
-            byte[] bytes = new byte[16384];
+            byte[] bytes = new byte[readBufferSize];
             int length;
             File zipFile = new File(outputDir + "/" + "file.agozip");
             while ((length = fis.read(bytes)) >= 0) {
                 System.out.println(zipFile.length());
+                if ((zipFile.length() + readBufferSize) >= maxBytes) {
+                    System.out.println("in break");
+                    break;
+                }
                 zos.write(bytes, 0, length);
             }
             fis.close();
@@ -72,7 +80,7 @@ public class Main {
             ZipInputStream zis = new ZipInputStream(new FileInputStream(ZipFile));
             ZipEntry zipEntry = zis.getNextEntry();
 
-            byte[] buffer = new byte[16384];
+            byte[] buffer = new byte[readBufferSize];
             while (zipEntry != null) {
                 File newFile = newFile(outFolder, zipEntry);
                 if (zipEntry.isDirectory()) {
