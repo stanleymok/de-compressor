@@ -13,13 +13,14 @@ public class Compressor {
     private String inputDir;
     private FileOutputStream fos;
     private ZipOutputStream zos;
-    private static int readBufferSize = 16384;
+    private int readBufferSize;
 
-    public Compressor(String inputDir, String outputDir, String maxMB) {
+    public Compressor(String inputDir, String outputDir, String maxMB, int readBufferSize) {
         this.maxBytes = (int) (Double.parseDouble(maxMB) * 1000000); 
         this.outFolder = new File(outputDir);
         this.outputDir = outputDir;
         this.inputDir = inputDir;
+        this.readBufferSize = readBufferSize;
     }
 
     public void compress() {
@@ -37,7 +38,7 @@ public class Compressor {
         }
     }
 
-    public void compressFile(File fileToZip, String relFileName, String outputDir) throws IOException {
+    private void compressFile(File fileToZip, String relFileName, String outputDir) throws IOException {
         if (fileToZip.isHidden())
             return;
         if (fileToZip.isDirectory()) {
