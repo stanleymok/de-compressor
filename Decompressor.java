@@ -13,6 +13,7 @@ public class Decompressor {
     private String prefix;
     private int fileNumber;
     private String suffix;
+    private boolean isAppend = true;
 
     public Decompressor(String inputDir, String outputDir, int readBufferSize,
                         String prefix, String suffix) {
@@ -31,7 +32,7 @@ public class Decompressor {
 
         String zipFileStr = this.inputDir + "/" + this.prefix + this.fileNumber + this.suffix;
         File zipFile = new File(zipFileStr);
-        if (zipFile.exists()) {
+        while (zipFile.exists()) {
             try {
                 ZipInputStream zis = new ZipInputStream(new FileInputStream(zipFileStr));
                 ZipEntry zipEntry = zis.getNextEntry();
@@ -47,16 +48,21 @@ public class Decompressor {
                         if (!parent.isDirectory() && !parent.mkdirs()) {
                             throw new IOException("Failed to create directory " + parent);
                         }
-                        FileOutputStream fis = new FileOutputStream(newFile);
+                        FileOutputStream fos = new FileOutputStream(newFile, this.isAppend);
                         int len;
-                        while ((len = zis.read(buffer)) > 0)
-                            fis.write(buffer, 0, len);
-                        fis.close();
+                        while ((len = zis.read(buffer)) > 0) {
+                            System.out.println(newFile.getName() + newFile.length());
+                            fos.write(buffer, 0, len);
+                        }
+                        fos.close();
                     }
                 zipEntry = zis.getNextEntry();
                 }
                 zis.closeEntry();
                 zis.close();
+                this.fileNumber++;
+                zipFileStr = this.inputDir + "/" + this.prefix + this.fileNumber + this.suffix;
+                zipFile = new File(zipFileStr);
             } catch (IOException e) {
                 System.out.println(e);
             }
