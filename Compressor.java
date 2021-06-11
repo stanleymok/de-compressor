@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
-import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
 
@@ -63,7 +62,6 @@ public class Compressor {
             File zipFile = new File(this.outputDir + "/" + 
                                     this.prefix + this.fileNumber + this.suffix);
             while ((length = fis.read(bytes)) >= 0) {
-                System.out.println(zipFile.length());
                 if ((zipFile.length() + this.readBufferSize) >= this.maxBytes) {
                     this.zos.close();
                     this.fileNumber++;

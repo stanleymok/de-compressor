@@ -3,8 +3,8 @@ import java.io.IOException;
 import java.io.FileOutputStream;
 import java.io.FileInputStream;
 import java.util.zip.ZipInputStream;
-import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
+import java.util.HashSet;
 
 public class Decompressor {
     private String inputDir;
@@ -14,6 +14,7 @@ public class Decompressor {
     private int fileNumber;
     private String suffix;
     private boolean isAppend = true;
+    private HashSet<String> fileSet;
 
     public Decompressor(String inputDir, String outputDir, int readBufferSize,
                         String prefix, String suffix) {
@@ -23,6 +24,7 @@ public class Decompressor {
         this.prefix = prefix;
         this.suffix = suffix;
         this.fileNumber = 1;
+        fileSet = new HashSet<String>();
     }
 
     public void decompress() {
@@ -39,6 +41,11 @@ public class Decompressor {
                 byte[] buffer = new byte[this.readBufferSize];
                 while (zipEntry != null) {
                     File newFile = newFile(outFolder, zipEntry);
+                    // delete file if it exists, only once
+                    if (newFile.exists() && !this.fileSet.contains(newFile.getAbsolutePath())) {
+                        newFile.delete();
+                        this.fileSet.add(newFile.getAbsolutePath());
+                    }
                     if (zipEntry.isDirectory()) {
                         if (!newFile.isDirectory() && !newFile.mkdirs()) {
                             throw new IOException("Failed to create directory " + newFile);
@@ -51,7 +58,6 @@ public class Decompressor {
                         FileOutputStream fos = new FileOutputStream(newFile, this.isAppend);
                         int len;
                         while ((len = zis.read(buffer)) > 0) {
-                            System.out.println(newFile.getName() + newFile.length());
                             fos.write(buffer, 0, len);
                         }
                         fos.close();

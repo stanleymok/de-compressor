@@ -1,5 +1,3 @@
-
-
 public class Main {
 
     private static int readBufferSize = 16384;
