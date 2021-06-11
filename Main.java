@@ -5,70 +5,26 @@ import java.io.FileInputStream;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
+//import Compressor;
 
 
 
 public class Main {
 
-    public static int readBufferSize = 16384;
+    private static int readBufferSize = 16384;
+    private String helpMsg1 = "Compression   Usage: java Main <input dir> <output dir> <max compressed size in MB>";
+    private String helpMsg2 = "Decompression Usage: java Main <input dir> <output dir>";
 
 	public static void main(String[] args) {
         if (args.length == 3) {
-            compressFileDriver(args[0], args[1], args[2]);
+            Compressor compressor = new Compressor(args[0], args[1], args[2]);
+            compressor.compress();
         } else if (args.length == 2) {
             decompressFile(args[0], args[1]);
         } else {
-            String helpMsg1 = "Compression   Usage: java Main <input dir> <output dir> <max compressed size in MB>";
-            String helpMsg2 = "Decompression Usage: java Main <input dir> <output dir>";
             System.out.println(helpMsg1 + "\n" + helpMsg2);
         }
 	}
-
-    static void compressFileDriver(String inputDir, String outputDir, String maxMB) {
-        int maxBytes = (int) (Double.parseDouble(maxMB) * 1000000); 
-        File outFolder = new File(outputDir);
-        if (!outFolder.exists())
-            outFolder.mkdir();
-        try {
-            FileOutputStream fis = new FileOutputStream(outputDir + "/" + "file.agozip");
-            ZipOutputStream zos = new ZipOutputStream(fis);
-            File fileToZip = new File(inputDir);
-            compressFile(fileToZip, "", outputDir, maxBytes, zos);
-            zos.close();
-            fis.close();
-        } catch (IOException e) {
-            System.out.println(e);
-        }
-    }
-
-    static void compressFile(File fileToZip, String fileName, String outputDir, int maxBytes, 
-                                ZipOutputStream zos) throws IOException {
-        if (fileToZip.isHidden())
-            return;
-        if (fileToZip.isDirectory()) {
-            for (File childFile : fileToZip.listFiles()) {
-                compressFile(childFile, fileName + "/" + childFile.getName(), 
-                                                    outputDir, maxBytes, zos);
-            }
-            return;
-        } else {
-            FileInputStream fis = new FileInputStream(fileToZip);
-            ZipEntry zipEntry = new ZipEntry(fileName);
-            zos.putNextEntry(zipEntry);
-            byte[] bytes = new byte[readBufferSize];
-            int length;
-            File zipFile = new File(outputDir + "/" + "file.agozip");
-            while ((length = fis.read(bytes)) >= 0) {
-                System.out.println(zipFile.length());
-                if ((zipFile.length() + readBufferSize) >= maxBytes) {
-                    System.out.println("in break");
-                    break;
-                }
-                zos.write(bytes, 0, length);
-            }
-            fis.close();
-        }
-    }
 
     static void decompressFile(String inputDir, String outputDir) {
         File outFolder = new File(outputDir);
