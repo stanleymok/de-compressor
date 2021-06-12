@@ -41,11 +41,11 @@ public class Compressor {
             File fileToZip = new File(this.inputDir);
             compressFile(fileToZip, "", this.outputDir);
             this.zos.close();
-            return true;
         } catch (IOException e) {
             System.out.println(e);
             return false;
         }
+        return true;
     }
 
     private void compressFile(File fileToZip, String relFileName, String outputDir) throws IOException {

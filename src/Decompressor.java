@@ -29,7 +29,7 @@ public class Decompressor {
         fileSet = new HashSet<String>();
     }
 
-    public void decompress() {
+    public boolean decompress() {
         File outFolder = new File(this.outputDir);
         if (!outFolder.exists())
             outFolder.mkdir();
@@ -46,8 +46,9 @@ public class Decompressor {
                     // delete file if it exists, only once
                     if (newFile.exists() && !this.fileSet.contains(newFile.getAbsolutePath())) {
                         newFile.delete();
-                        this.fileSet.add(newFile.getAbsolutePath());
+                        //this.fileSet.add(newFile.getAbsolutePath());
                     }
+                    this.fileSet.add(newFile.getAbsolutePath()); // add to fileset since its created alredy
                     if (zipEntry.isDirectory()) {
                         if (!newFile.isDirectory() && !newFile.mkdirs()) {
                             throw new IOException("Failed to create directory " + newFile);
@@ -73,8 +74,10 @@ public class Decompressor {
                 zipFile = new File(zipFileStr);
             } catch (IOException e) {
                 System.out.println(e);
+                return false;
             }
         }
+        return true;
     }
 
     private File newFile(File destDir, ZipEntry zipEntry) throws IOException {
