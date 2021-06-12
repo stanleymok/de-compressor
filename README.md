@@ -1,23 +1,24 @@
 # de-compressor
-Software to compress / decompress files in Java
+Software to compress / decompress files in Java, with unit/integration tests in JUnit.
 
-## to run
+## To Run
 These have been tested on WSL on windows.
 
-### prerequisites
+### Prerequisites
 - java
 - javac
 
-### to compile
+### To Compile and Run Unit + Integration Tests
+Simply run the bash script that runs compilation and JUnit tests
 ```
-javac *.java
+$ ./run.sh
 ```
-### run
-#### compress
+
+### Compress
 ```
-java Main <folder-to-be-compressed> <output-folder> <max-compressed-file-in-MB>
+$ java Main <folder-to-be-compressed> <output-folder> <max-compressed-file-in-MB>
 ```
-#### to decompress
+### Decompress
 ```
-java Main <folder-to-be-decompressed> <output-folder>
+$ java Main <folder-to-be-decompressed> <output-folder>
 ```
