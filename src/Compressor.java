@@ -31,7 +31,7 @@ public class Compressor {
         this.fileNumber = 1;
     }
 
-    public void compress() {
+    public boolean compress() {
         if (!this.outFolder.exists())
             this.outFolder.mkdir();
         try {
@@ -41,8 +41,10 @@ public class Compressor {
             File fileToZip = new File(this.inputDir);
             compressFile(fileToZip, "", this.outputDir);
             this.zos.close();
+            return true;
         } catch (IOException e) {
             System.out.println(e);
+            return false;
         }
     }
 

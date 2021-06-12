@@ -2,7 +2,7 @@ import src.*;
 
 public class Main {
 
-    private static int readBufferSize = 16384;
+    private static int readBufferSize = 1024;
     private static String helpMsg1 = "Compression   Usage: java Main <input dir> <output dir> <max compressed size in MB>";
     private static String helpMsg2 = "Decompression Usage: java Main <input dir> <output dir>";
     private static String prefix = "file";

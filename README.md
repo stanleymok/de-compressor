@@ -2,7 +2,13 @@
 Software to compress / decompress files in Java
 
 ## to run
-## to compile
+These have been tested on WSL on windows.
+
+### prerequisites
+- java
+- javac
+
+### to compile
 ```
 javac *.java
 ```

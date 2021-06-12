@@ -1,4 +1,4 @@
-//import src.*;
+import src.Decompressor;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;

@@ -1,3 +1,6 @@
+# test output folder
+test/inputs/output/*
+
 # Compiled class file
 *.class
 
